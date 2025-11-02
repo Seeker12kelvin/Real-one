@@ -1,8 +1,9 @@
 import React from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from './pages/login/login.jsx'
+import Home from './pages/Home/home.jsx'
 import LoginMain from './pages/login/loginMain.jsx'
-import CreateAccount from './pages/login/CreateAccount.jsx'
+import CreateAccount from './pages/CreateAccount/CreateAccount.jsx'
 import { StyleCreatorContext } from './pages/login/styleContext.jsx'
 
 function App() {
@@ -62,9 +63,10 @@ function App() {
           styleTwo
         }}>
           <Routes>
+            <Route path="/" element={<Home />}/>
             <Route path="/login" element={<Login />}>
               <Route index element={<LoginMain />} />
-              <Route path='create-account' element={<CreateAccount />} />
+              <Route path='/create' element={<CreateAccount />} />
             </Route>
           </Routes>
         </StyleCreatorContext.Provider>
