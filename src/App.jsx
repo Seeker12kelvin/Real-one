@@ -66,7 +66,7 @@ function App() {
             <Route path="/" element={<Home />}/>
             <Route path="/login" element={<Login />}>
               <Route index element={<LoginMain />} />
-              <Route path='/create' element={<CreateAccount />} />
+              <Route path='create' element={<CreateAccount />} />
             </Route>
           </Routes>
         </StyleCreatorContext.Provider>

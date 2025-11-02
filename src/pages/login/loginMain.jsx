@@ -12,7 +12,7 @@ const LoginMain = () => {
     <>
       <div className='w-full flex flex-col items-start gap-2'>
         <h1 className='text-5xl font-normal text-[#18181B] mb-2'>Welcome back</h1>
-        <h3 className="mb-6 text-gray-600 text-[14px]">Don't have an account? <Link to='/create-account' className='cursor-pointer text-[#FC5F2B]'>Create an account</Link></h3>
+        <h3 className="mb-6 text-gray-600 text-[14px]">Don't have an account? <Link to='/create' className='cursor-pointer text-[#FC5F2B]'>Create an account</Link></h3>
         
         <label htmlFor='email' className='mb-0 text-[14px] font-normal text-[#71717A]'>Email</label>
         <input
