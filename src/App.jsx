@@ -12,6 +12,10 @@ function App() {
   const [button, setButton] = React.useState(false)
   const [showPassword, setShowPassword] = React.useState(false)
 
+  const passWarning = showPassword && button && !inputPassValue ? (<p className='text-[#b90090] text-[13px] flex items-center gap-0 w-full m-0'><RiErrorWarningLine />Please enter a valid password</p>): null
+
+  const emailWarning = button && !inputValue ? (<p className='text-[#b90090] text-[13px] flex items-center gap-0 w-full m-0'><RiErrorWarningLine />Please enter a valid email address</p>): null
+
   const handleSubmit = (event) => {
     event.preventDefault()
     setButton(true)
@@ -46,6 +50,8 @@ function App() {
     borderRadius: '12px'
   }
 
+  const btnStyle = "bg-[#18181B] mt-4 mb-5 text-white cursor-pointer p-4 rounded-xl w-full hover:opacity-[1] transition-opacity"
+
   return (
     <>
       <BrowserRouter>
@@ -60,13 +66,16 @@ function App() {
           setShowPassword,
           handleSubmit,
           style,
-          styleTwo
+          styleTwo,
+          btnStyle,
+          passWarning,
+          emailWarning
         }}>
           <Routes>
             <Route path="/" element={<Home />}/>
             <Route path="/login" element={<Login />}>
               <Route index element={<LoginMain />} />
-              <Route path='create' element={<CreateAccount />} />
+              <Route path="create" element={<CreateAccount />} />
             </Route>
           </Routes>
         </StyleCreatorContext.Provider>
