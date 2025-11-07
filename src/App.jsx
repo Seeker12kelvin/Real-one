@@ -1,35 +1,45 @@
-import React from 'react'
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import Login from './pages/login/login.jsx'
-import LandingPage from './pages/Landing/LandingPage.jsx'
+import React, {useState} from 'react'
+import { Route, Routes, useNavigate } from 'react-router-dom'
+import LoginPage from './pages/login/login.jsx'
 import LoginMain from './pages/login/loginMain.jsx'
+import LandingPage from './pages/Landing/LandingPage.jsx'
 import CreateAccount from './pages/CreateAccount/CreateAccount.jsx'
+import HomePage from './pages/Home/homePage.jsx'
 import { StyleCreatorContext } from './components/styleContext.jsx'
-import { RiErrorWarningLine } from "react-icons/ri";
+import { RiErrorWarningLine } from "react-icons/ri"
 
 function App() {
-  const [passWarning, setPassWarning] = React.useState('')
-  const [emailWarning, setEmailWarning] = React.useState('')
-  const [inputValue, setInputValue] = React.useState()
-  const [inputPassValue, setPassInputValue] = React.useState()
-  const [button, setButton] = React.useState(false)
-  const [showPassword, setShowPassword] = React.useState(false)
+  const [passWarning, setPassWarning] = useState('')
+  const [emailWarning, setEmailWarning] = useState('')
+  const [inputValue, setInputValue] = useState()
+  const [inputPassValue, setPassInputValue] = useState()
+  const [button, setButton] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
-  const [data, setData] = React.useState()
-  const [email, setEmail] = React.useState()
-  const [correctEmail, setCorrectEmail] = React.useState(false)
+  const [data, setData] = useState()
+  const [email, setEmail] = useState()
+  const [correctEmail, setCorrectEmail] = useState(false)
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     localStorage.setItem('userData', JSON.stringify(data))
   }, [data])
   
+  const dataUser = {
+    mail: email,
+    name: 'kelvin',
+    age: 20,
+    image: 'c07d803f-3a2d-4dae-8a60-e4b8191b6378.jpg'
+  }
+
   const handleAccount = (event) => {
     event.preventDefault()
-    setData(email)
+    setData(dataUser)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    const userData = JSON.parse(localStorage.getItem('userData'))
 
     if (showPassword && inputPassValue === '' ) {
       setPassWarning(<p className='text-[#b90090] text-[13px] flex items-center gap-0 w-full m-0'><RiErrorWarningLine />Please enter your password</p>)
@@ -39,9 +49,10 @@ function App() {
       setEmailWarning(<p className='text-[#b90090] text-[13px] flex items-center gap-0 w-full m-0'><RiErrorWarningLine />Please enter a valid email address</p>)
     }
     
-    if(inputValue === JSON.parse(localStorage.getItem('userData'))){
+    if(inputValue === userData?.mail) {
       localStorage.setItem("In", JSON.stringify("Im in"))
       setCorrectEmail(prev => !prev)
+      navigate('/home', {state: {data: userData.name, age: userData.age, image: userData.image}})
     }
 
     console.log('Logging in with:', { email: inputValue, password: inputPassValue })
@@ -72,37 +83,36 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <StyleCreatorContext.Provider value={{
-          inputValue,
-          setInputValue,
-          inputPassValue,
-          setPassInputValue,
-          button,
-          setButton,
-          showPassword,
-          setShowPassword,
-          handleSubmit,
-          style,
-          styleTwo,
-          btnStyle,
-          passWarning,
-          emailWarning,
-          handleAccount,
-          email,
-          setEmail,
-          correctEmail,
-          setCorrectEmail
-        }}>
-          <Routes>
-            <Route path="/" element={<LandingPage />}/>
-            <Route path="/login" element={<Login />}>
-              <Route index element={<LoginMain />} />
-              <Route path="create" element={<CreateAccount />} />
-            </Route>
-          </Routes>
-        </StyleCreatorContext.Provider>
-      </BrowserRouter>
+      <StyleCreatorContext.Provider value={{
+        inputValue,
+        setInputValue,
+        inputPassValue,
+        setPassInputValue,
+        button,
+        setButton,
+        showPassword,
+        setShowPassword,
+        handleSubmit,
+        style,
+        styleTwo,
+        btnStyle,
+        passWarning,
+        emailWarning,
+        handleAccount,
+        email,
+        setEmail,
+        correctEmail,
+        setCorrectEmail
+      }}>
+        <Routes>
+          <Route path="/" element={<LandingPage />}/>
+          <Route path="/home" element={<HomePage />}/>
+          <Route path="/login" element={<LoginPage />}>
+            <Route index element={<LoginMain />} />
+            <Route path="create" element={<CreateAccount />} />
+          </Route>
+        </Routes>
+      </StyleCreatorContext.Provider>
     </>
   )
     
