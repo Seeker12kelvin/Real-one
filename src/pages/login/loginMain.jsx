@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { RiErrorWarningLine } from "react-icons/ri";
-import { StyleCreatorContext } from './styleContext.jsx'
+import { StyleCreatorContext } from '../../components/styleContext.jsx'
 import { useContext } from 'react'
 
 const LoginMain = () => {
@@ -11,12 +10,13 @@ const LoginMain = () => {
         inputPassValue, setPassInputValue,
         setShowPassword, showPassword,
         passWarning, emailWarning, 
-        handleSubmit} = useContext(StyleCreatorContext)
+        handleSubmit, correctEmail} = useContext(StyleCreatorContext)
 
   return (
     <>
       <h2 className="text-[20px] text-black font-bold">superpower</h2>
-      <div className='w-full mt-auto flex flex-col items-start '>
+      { !correctEmail ?
+        <form onSubmit={handleSubmit} className='w-full mt-auto flex flex-col items-start '>
         <h1 className='text-5xl font-normal text-[#18181B] mb-2'>Welcome back</h1>
         <h3 className="mb-6 text-gray-600 text-[14px]">Don't have an account? <Link to="create" className='cursor-pointer text-[#FC5F2B]'>Create an account</Link></h3>
         
@@ -47,7 +47,6 @@ const LoginMain = () => {
           {passWarning}
 
         <button
-          onClick={handleSubmit}
           type="submit"
           className={btnStyle}
         >
@@ -56,7 +55,7 @@ const LoginMain = () => {
 
         {showPassword ? (<><p className="mb-8 text-gray-600 text-[14px]">Forgot your login details? <Link className='text-[#FC5F2B] text-[13px]'>Reset password</Link></p> <Link className='text-[#FC5F2B] text-[13px] -mt-9 mb-6 hover:underline'>Sign in with magic link</Link></>):(<button className='-mt-3' onClick={() => {setShowPassword(prev => !prev)}}><Link className='text-[#FC5F2B] text-[13px] hover:underline'>Sign in with password instead.</Link></button>)}
         
-      </div>
+      </form> : <Link to='..'>Login</Link>}
     </>
   )
 }

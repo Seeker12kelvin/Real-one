@@ -1,34 +1,52 @@
 import React from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from './pages/login/login.jsx'
-import Home from './pages/Home/home.jsx'
+import LandingPage from './pages/Landing/LandingPage.jsx'
 import LoginMain from './pages/login/loginMain.jsx'
 import CreateAccount from './pages/CreateAccount/CreateAccount.jsx'
-import { StyleCreatorContext } from './pages/login/styleContext.jsx'
+import { StyleCreatorContext } from './components/styleContext.jsx'
+import { RiErrorWarningLine } from "react-icons/ri";
 
 function App() {
-  const [inputValue, setInputValue] = React.useState('')
-  const [inputPassValue, setPassInputValue] = React.useState('')
+  const [passWarning, setPassWarning] = React.useState('')
+  const [emailWarning, setEmailWarning] = React.useState('')
+  const [inputValue, setInputValue] = React.useState()
+  const [inputPassValue, setPassInputValue] = React.useState()
   const [button, setButton] = React.useState(false)
   const [showPassword, setShowPassword] = React.useState(false)
 
-  const passWarning = showPassword && button && !inputPassValue ? (<p className='text-[#b90090] text-[13px] flex items-center gap-0 w-full m-0'><RiErrorWarningLine />Please enter a valid password</p>): null
+  const [data, setData] = React.useState()
+  const [email, setEmail] = React.useState()
+  const [correctEmail, setCorrectEmail] = React.useState(false)
 
-  const emailWarning = button && !inputValue ? (<p className='text-[#b90090] text-[13px] flex items-center gap-0 w-full m-0'><RiErrorWarningLine />Please enter a valid email address</p>): null
+  React.useEffect(() => {
+    localStorage.setItem('userData', JSON.stringify(data))
+  }, [data])
+  
+  const handleAccount = (event) => {
+    event.preventDefault()
+    setData(email)
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    setButton(true)
-    
-    if (inputValue && !showPassword) {
-      setShowPassword(false)
+
+    if (showPassword && inputPassValue === '' ) {
+      setPassWarning(<p className='text-[#b90090] text-[13px] flex items-center gap-0 w-full m-0'><RiErrorWarningLine />Please enter your password</p>)
     }
 
-    if (inputValue && inputPassValue && showPassword) {
-      // Add your login logic here
-      console.log('Logging in with:', { email: inputValue, password: inputPassValue })
+    if (inputValue === '' && !showPassword || (showPassword && inputValue === '')) {
+      setEmailWarning(<p className='text-[#b90090] text-[13px] flex items-center gap-0 w-full m-0'><RiErrorWarningLine />Please enter a valid email address</p>)
     }
+    
+    if(inputValue === JSON.parse(localStorage.getItem('userData'))){
+      localStorage.setItem("In", JSON.stringify("Im in"))
+      setCorrectEmail(prev => !prev)
+    }
+
+    console.log('Logging in with:', { email: inputValue, password: inputPassValue })
   }
+
 
   const style = {
     width: '100%',
@@ -69,10 +87,15 @@ function App() {
           styleTwo,
           btnStyle,
           passWarning,
-          emailWarning
+          emailWarning,
+          handleAccount,
+          email,
+          setEmail,
+          correctEmail,
+          setCorrectEmail
         }}>
           <Routes>
-            <Route path="/" element={<Home />}/>
+            <Route path="/" element={<LandingPage />}/>
             <Route path="/login" element={<Login />}>
               <Route index element={<LoginMain />} />
               <Route path="create" element={<CreateAccount />} />
